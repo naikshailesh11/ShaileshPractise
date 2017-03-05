@@ -6,6 +6,19 @@ using System.Web.Mvc;
 using MVCPractise.Models;
 namespace MVCPractise.Controllers
 {
+    public class CustomerBinder : IModelBinder
+    {
+        public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
+        {
+            HttpContextBase objcontext =controllerContext.HttpContext;
+            string CustomerCode = objcontext.Request.Form["txtCustomerCode"];
+            string CustomerName = objcontext.Request.Form["txtCustomerName"];
+            Customer obj = new Customer { CustomerCode = CustomerCode, CustomerName = CustomerName };
+            return obj;
+
+        }
+    }
+
     public class CustomerController : Controller
     {
         // GET: Customer
@@ -19,7 +32,7 @@ namespace MVCPractise.Controllers
         {
             return View("EnterCustomer");
         }
-        public ActionResult Submit(Customer obj)
+        public ActionResult Submit([ModelBinder (typeof(CustomerBinder) )] Customer obj)
         {
             //Customer obj = new Customer();
             //obj.CustomerCode = Request.Form["CustomerCode"];
