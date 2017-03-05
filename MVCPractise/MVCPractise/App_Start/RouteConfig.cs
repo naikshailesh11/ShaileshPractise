@@ -13,6 +13,19 @@ namespace MVCPractise
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            
+
+            routes.MapRoute(
+               name: "Home",
+               url: "Home",
+               defaults: new { controller = "HelloWorld", action = "GoToHome", id = UrlParameter.Optional }
+           );
+
+            routes.MapRoute(
+                name: "Home1",
+                url: "",
+                defaults: new { controller = "HelloWorld", action = "GoToHome", id = UrlParameter.Optional }
+            );
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
