@@ -11,10 +11,15 @@ namespace MVCPractise.Controllers
         // GET: HelloWorld
         public ActionResult Index()
         {
-            return View();
+            TempData["MyTimeTemp"] = DateTime.Now.Date;
+            ViewBag.MyTime = DateTime.Now.Date;
+            //return View();
+            return RedirectToAction("GoToHome", "HelloWorld");
         }
         public ActionResult GoToHome()
         {
+            //ViewBag.MyTime = DateTime.Now.Date;
+            ViewBag.CurrentTime = DateTime.Now.TimeOfDay;
             return View("MyHomePage");
         }
     }
