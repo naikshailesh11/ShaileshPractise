@@ -10,13 +10,13 @@ namespace MVCPractise.Controllers
     {
         public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
-            HttpContextBase objcontext =controllerContext.HttpContext;
-            string CustomerCode = objcontext.Request.Form["txtCustomerCode"];
-            string CustomerName = objcontext.Request.Form["txtCustomerName"];
+            HttpContextBase objcontext = controllerContext.HttpContext;
+            string CustomerCode = objcontext.Request.Form["CustomerName"];
+            string CustomerName = objcontext.Request.Form["CustomerCode"];
             Customer obj = new Customer { CustomerCode = CustomerCode, CustomerName = CustomerName };
             return obj;
 
-        }
+        } 
     }
 
     public class CustomerController : Controller
@@ -30,14 +30,22 @@ namespace MVCPractise.Controllers
 
         public ActionResult Enter()
         {
-            return View("EnterCustomer");
+            return View("EnterCustomer",new Customer());
         }
         public ActionResult Submit([ModelBinder (typeof(CustomerBinder) )] Customer obj)
         {
             //Customer obj = new Customer();
             //obj.CustomerCode = Request.Form["CustomerCode"];
             //obj.CustomerName = Request.Form["CustomerName"];
-            return View("Load",obj);
+            if (ModelState.IsValid)
+            {
+                return View("Load", obj);
+            }
+            else
+            {
+                return View("EnterCustomer",obj);
+            }
+            
         }
     }
 }
