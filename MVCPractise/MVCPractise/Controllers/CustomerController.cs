@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MVCPractise.Models;
+using MVCPractise.DAL;
+using System.Text;
 namespace MVCPractise.Controllers
 {
     public class CustomerBinder : IModelBinder
@@ -34,11 +36,36 @@ namespace MVCPractise.Controllers
         }
         public ActionResult Submit([ModelBinder (typeof(CustomerBinder) )] Customer obj)
         {
-            //Customer obj = new Customer();
-            //obj.CustomerCode = Request.Form["CustomerCode"];
-            //obj.CustomerName = Request.Form["CustomerName"];
+           
             if (ModelState.IsValid)
             {
+                /* if valid  enter in db using entityframework model*/
+                CustomerDal Dal = new CustomerDal();
+                Dal.Customers.Add(obj);
+                try
+                {
+                    
+                    Dal.SaveChanges();
+                }
+                catch(System.Data.Entity.Validation.DbEntityValidationException e)
+                {
+                    StringBuilder k = new StringBuilder();
+                    foreach (var eve in e.EntityValidationErrors)
+                    {
+
+                        k.Append("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:");
+                        k.Append(eve.Entry.Entity.GetType().Name);
+                        k.Append( eve.Entry.State);
+                        foreach (var ve in eve.ValidationErrors)
+                        {
+                            k.Append("- Property: \"{0}\", Error: \"{1}\"");
+
+                            k.Append(ve.PropertyName);
+                            k.Append (ve.ErrorMessage);
+                        }
+                    }
+                }
+               
                 return View("Load", obj);
             }
             else
