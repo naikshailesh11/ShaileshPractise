@@ -1,4 +1,4 @@
-﻿@model MVCPractise.Models.Customer
+﻿@model MVCPractise.ViewModel.CustomerViewModel
 @using MVCPractise.Models;
 @{
     Layout = null;
@@ -19,15 +19,14 @@
 
         @using (Html.BeginForm("Submit", "Customer", FormMethod.Post))
         {
-            <i>Customer Name</i> @Html.TextBoxFor(m => m.CustomerName) <br />
-            @Html.ValidationMessageFor(x => x.CustomerName)<br />
-            <i> Customer Code </i> @Html.TextBoxFor(m => m.CustomerCode)<br />
-            @Html.ValidationMessageFor(x => x.CustomerCode)<br />
+            <i>Customer Name</i> @Html.TextBoxFor(m => m.customer.CustomerName) <br />
+            @Html.ValidationMessageFor(x => x.customer.CustomerName)<br />
+            <i> Customer Code </i> @Html.TextBoxFor(m => m.customer.CustomerCode)<br />
+            @Html.ValidationMessageFor(x => x.customer.CustomerCode)<br />
             <input id="Submit1" type="submit" value="submit" />
         }
         <br />
-
-
+        @Html.Partial("DisplayCustomer", Model)
     </div>
 </body>
 </html>
