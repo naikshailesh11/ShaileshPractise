@@ -1,0 +1,27 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ConsumeCustomer</title>
+</head>
+<body>
+    <div> 
+        <script language="javascript">
+            debugger;
+            $.get("http://localhost:62999/Customer/GetCustomer", null, CallBack);
+            function CallBack(Data)
+            {
+                debugger;
+                alert(Data.CustomerCode);
+                alert(Data.CustomerName);
+            }
+        </script>
+    </div>
+</body>
+</html>
