@@ -12,15 +12,56 @@
     <meta name="viewport" content="width=device-width" />
     <title>SearchCustomer</title>
 </head>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
 <body>
     <div> 
-        <form action="SearchCustomer" method="post">
+        @*//action="SearchCustomer" method="post"*@
+        <form id="frm1" >
             Enter Customer <input name="txtCustomerName" id="Text1" type="text" />
             <br />
-            <input id="Submit1" type="submit" value="Search customer" />
+            
         </form>
+        <input id="btn" type="button" value="Search customer" onclick="SendData()" />
     </div>
     <br />
-    @Html.Partial("DisplayCustomer",Model)
+    <div id="divstatus"></div>
+    <table id="tbl">
+        <tr>
+            <td>Customer Code</td>
+            <td>Customer Name</td>
+        </tr>
+    </table>
+    <script language="JavaScript">
+           
+           
+            function BindData(Customers)
+            {
+
+                var tbl = $("#tbl")// find table with id tbl
+                for (var j =0;j< Customers.length;j++)
+                {
+                    var newtr = "<tr>" +
+                        "<td>" + Customers[j].CustomerCode + "</td>"
+                       + "<td>" + Customers[j].CustomerName + "</td>"
+                    + "</tr>";
+                    tbl.append(newtr);
+                }
+                $("#divstatus").text("");
+            }
+            function SendData()
+            {
+                $("#divstatus").text("Searching...");
+                // calling $.post is three step process
+                //step1 reference of form
+                // step2 serialise data
+                var frm = $("#frm1").serialize();
+                //call post
+                $.post("SearchCustomer", frm, BindData);
+                $("#Text1").val("");
+                
+            }
+    </script>
 </body>
 </html>

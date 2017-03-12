@@ -17,16 +17,52 @@
 <body>
     <div>
 
-        @using (Html.BeginForm("Submit", "Customer", FormMethod.Post))
-        {
+        <form id="frm1">
             <i>Customer Name</i> @Html.TextBoxFor(m => m.customer.CustomerName) <br />
             @Html.ValidationMessageFor(x => x.customer.CustomerName)<br />
             <i> Customer Code </i> @Html.TextBoxFor(m => m.customer.CustomerCode)<br />
             @Html.ValidationMessageFor(x => x.customer.CustomerCode)<br />
-            <input id="Submit1" type="submit" value="submit" />
-        }
+        </form>
+            <input id="btn" type="button" value="Add Customer" onclick="SendData()" />
+        
         <br />
-        @Html.Partial("DisplayCustomer", Model)
+        <div id="divstatus"></div>
+        <table id="tbl">
+            <tr>
+                <td>Customer Code</td>
+                <td>Customer Name</td>
+            </tr>
+        </table>
+        <script language="JavaScript">
+            $("#divstatus").text("Loading...");
+            $.get("GetCustomers", null, BindData);
+            function BindData(Customers)
+            {
+                
+                var tbl = $("#tbl")// find table with id tbl
+                for (var j =0;j< Customers.length;j++)
+                {
+                    var newtr = "<tr>" +
+                        "<td>" + Customers[j].CustomerCode + "</td>"
+                       + "<td>" + Customers[j].CustomerName + "</td>"
+                    + "</tr>";
+                    tbl.append(newtr);
+                }
+                $("#divstatus").text("");
+            }
+            function SendData()
+            {
+                $("#divstatus").text("Adding to DataBase...");
+                // calling $.post is three step process
+                //step1 reference of form
+                // step2 serialise data
+                var frm = $("#frm1").serialize();
+                //call post
+                $.post("Submit", frm, BindData);
+                $("#customer_CustomerName").val("");
+                $("#customer_CustomerCode").val("");
+            }
+        </script>
     </div>
 </body>
 </html>
