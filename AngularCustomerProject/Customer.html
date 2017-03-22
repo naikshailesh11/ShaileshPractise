@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<script src="Scripts/angular.js"></script>
+<script>
+    function Customer($scope,$rootScope)
+    {
+       
+        $rootScope.Counter=(($rootScope.Counter || 0)+1);
+        $scope.CustomerName = "Shailesh";
+        $scope.CustomerCode = "1001";
+        $scope.Submit = function ()
+        {
+            if ($scope.CustomerName.length == 0) {
+                alert("Not a proper data");
+            }
+            else {
+                alert("Proper data");
+            }
+        }
+    }
+    var myapp = angular.module("myApp", []);
+    myapp.controller("CustomerObj",Customer);
+</script>
+<body ng-app="myApp">
+    {{Counter}}
+    <div id="CustScreen" ng-controller="CustomerObj">
+        Customer Name:- <input type="text" ng-model="CustomerName" id="CustomerName" />
+        Customer Code:- <input type="text" ng-model="CustomerCode" id="CustomerCode" />
+        <input type="button" name="name" ng-click="Submit()" value="Submit" />
+        <div id="divCustomerName"> {{CustomerName}}</div>
+        <div id="divCustomerCode"> {{CustomerCode}}</div>
+    </div><br/>
+    
+</body>
+</html>
