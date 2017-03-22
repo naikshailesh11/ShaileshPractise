@@ -18,14 +18,14 @@ namespace MVCPractise
             routes.MapRoute(
                name: "Home",
                url: "Home",
-               defaults: new { controller = "HelloWorld", action = "GoToHome", id = UrlParameter.Optional }
+               defaults: new { controller = "Home", action = "GotoHome", id = UrlParameter.Optional }
            );
 
           
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "HelloWorld", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

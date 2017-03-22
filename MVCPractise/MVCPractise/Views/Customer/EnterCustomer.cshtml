@@ -15,6 +15,8 @@
 <script src="~/Scripts/jquery.validate.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
 <body>
+    <a href="/Home/Index"> Home </a>
+    <br />
     <div>
 
         <form id="frm1">
@@ -23,46 +25,50 @@
             <i> Customer Code </i> @Html.TextBoxFor(m => m.customer.CustomerCode)<br />
             @Html.ValidationMessageFor(x => x.customer.CustomerCode)<br />
         </form>
-            <input id="btn" type="button" value="Add Customer" onclick="SendData()" />
-        
+        <input id="Btn" type="button" value="Add customer" onclick="SendData()" />
+
         <br />
-        <div id="divstatus"></div>
+        <div id="status"></div>
         <table id="tbl">
             <tr>
                 <td>Customer Code</td>
                 <td>Customer Name</td>
             </tr>
         </table>
-        <script language="JavaScript">
-            $("#divstatus").text("Loading...");
-            $.get("GetCustomers", null, BindData);
+        <script language="javascript">
+            $("#status").text("Loading...");
+            $.get("getCustomers", null, BindData);
             function BindData(Customers)
             {
-                
-                var tbl = $("#tbl")// find table with id tbl
-                for (var j =0;j< Customers.length;j++)
+                var tbl = $("#tbl"); // got reference of the table
+                // For loop
+                for (var j = 0; j < Customers.length ; j++)
                 {
-                    var newtr = "<tr>" +
-                        "<td>" + Customers[j].CustomerCode + "</td>"
-                       + "<td>" + Customers[j].CustomerName + "</td>"
-                    + "</tr>";
-                    tbl.append(newtr);
+                    var newRow = "<tr>" +
+                     "<td>" + Customers[j].CustomerCode + "</td>" +
+                     "<td>" + Customers[j].CustomerName + "</td>" +
+                 "</tr>";
+                    tbl.append(newRow);
                 }
-                $("#divstatus").text("");
+                $("#status").text("");
+
             }
             function SendData()
             {
-                $("#divstatus").text("Adding to DataBase...");
-                // calling $.post is three step process
-                //step1 reference of form
-                // step2 serialise data
+                // post call to the MVC controller
+                // reference of the form , serialize
+
+                $("#status").text("Adding please wait....");
                 var frm = $("#frm1").serialize();
-                //call post
                 $.post("Submit", frm, BindData);
+                // set the customer code and name textbox
+                // nothing
                 $("#customer_CustomerName").val("");
                 $("#customer_CustomerCode").val("");
+
             }
         </script>
+
     </div>
 </body>
 </html>

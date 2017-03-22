@@ -23,7 +23,8 @@ namespace MVCPractise.Controllers
 
         } 
     }
-
+   
+    [Authorize]
     public class CustomerController : Controller
     {
         // GET: Customer
@@ -39,7 +40,7 @@ namespace MVCPractise.Controllers
             CustomerViewModel obj = new CustomerViewModel();
             // fresh customer
             obj.customer = new Customer();
-            CustomerDal dal = new CustomerDal();
+            Dal dal = new Dal();
             //list of customer
             
             
@@ -57,7 +58,7 @@ namespace MVCPractise.Controllers
             {
                 // insert the customer object to database
                 // EF DAL
-                CustomerDal Dal = new CustomerDal();
+                Dal Dal = new Dal();
                 Dal.Customers.Add(obj); // in mmemory
                 Dal.SaveChanges(); // physical commit
                
@@ -66,7 +67,7 @@ namespace MVCPractise.Controllers
             {
                 
             }
-            CustomerDal dal = new CustomerDal();
+            Dal dal = new Dal();
             List<Customer> customerscoll = dal.Customers.ToList<Customer>();
            
             return Json(customerscoll,JsonRequestBehavior.AllowGet);
@@ -113,7 +114,7 @@ namespace MVCPractise.Controllers
         public ActionResult SearchCustomer()
         {
             //CustomerViewModel obj = new CustomerViewModel();
-            CustomerDal dal = new CustomerDal();
+            Dal dal = new Dal();
             string str = Request.Form["txtCustomerName"].ToString();
             List<Customer> customerscoll
                 = (from x in dal.Customers
@@ -134,7 +135,7 @@ namespace MVCPractise.Controllers
         }
         public ActionResult GetCustomers()
         {
-            CustomerDal dal = new CustomerDal();
+            Dal dal = new Dal();
             //list of customer
             List<Customer> customersColl = dal.Customers.ToList<Customer>();
             Thread.Sleep(10000);
