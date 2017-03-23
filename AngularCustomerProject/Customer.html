@@ -9,9 +9,28 @@
     function Customer($scope,$rootScope)
     {
        
-        $rootScope.Counter=(($rootScope.Counter || 0)+1);
+        
         $scope.CustomerName = "Shailesh";
+        var dt = new Date();
+        $scope.SalesDateTime = dt.toDateString();
+       
         $scope.CustomerCode = "1001";
+        $scope.CustomerAmt = "700";
+        $scope.CustomerAmtColor = "Red";
+        $scope.$watch("CustomerAmt"
+            , function ()
+                         {
+                              if ($scope.CustomerAmt> 1000)
+                              {
+                                  $scope.CustomerAmtColor = "Green";
+                              }
+                              else
+                              {
+                                  $scope.CustomerAmtColor = "Red";
+                              }
+                          }
+
+                     )
         $scope.Submit = function ()
         {
             if ($scope.CustomerName.length == 0) {
@@ -26,13 +45,16 @@
     myapp.controller("CustomerObj",Customer);
 </script>
 <body ng-app="myApp">
-    {{Counter}}
+    
     <div id="CustScreen" ng-controller="CustomerObj">
+       
         Customer Name:- <input type="text" ng-model="CustomerName" id="CustomerName" />
         Customer Code:- <input type="text" ng-model="CustomerCode" id="CustomerCode" />
+        Customer Amount:- <input type="text" ng-model="CustomerAmt" id="CustomerAmt" style="background-color:{{CustomerAmtColor}}" />
         <input type="button" name="name" ng-click="Submit()" value="Submit" />
         <div id="divCustomerName"> {{CustomerName}}</div>
         <div id="divCustomerCode"> {{CustomerCode}}</div>
+        Sale Date and Time :{{::SalesDateTime}} <br />
     </div><br/>
     
 </body>
