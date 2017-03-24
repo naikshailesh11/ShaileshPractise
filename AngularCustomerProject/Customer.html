@@ -5,35 +5,23 @@
 	<meta charset="utf-8" />
 </head>
 <script src="Scripts/angular.js"></script>
+<script src="Scripts/Customer.js"></script>
+<script src="Scripts/Utility.js"></script>
 <script>
-    function Customer($scope,$rootScope)
-    {
-       
-        
-        $scope.CustomerName = "Shailesh";
-        var dt = new Date();
-        $scope.SalesDateTime = dt.toDateString();
-       
-        $scope.CustomerCode = "1001";
-        $scope.CustomerAmt = "700";
-        $scope.CustomerAmtColor = "Red";
-        $scope.$watch("CustomerAmt"
-            , function ()
-                         {
-                              if ($scope.CustomerAmt> 1000)
-                              {
-                                  $scope.CustomerAmtColor = "Green";
-                              }
-                              else
-                              {
-                                  $scope.CustomerAmtColor = "Red";
-                              }
-                          }
-
-                     )
-        $scope.Submit = function ()
-        {
-            if ($scope.CustomerName.length == 0) {
+    function BindingCode($scope, Factory, UtilityObject) {
+        $scope.Customer = Factory.CreateCustomer(2, UtilityObject);
+        $scope.CustomerAmountColor = "Red";
+        $scope.Utility = UtilityObject;
+        $scope.$watch("Customer.CustomerAmount", function () {
+            if ($scope.Customer.CustomerAmount > 1000) {
+                $scope.CustomerAmountColor = "Green";
+            }
+            else {
+                $scope.CustomerAmountColor = "Blue";
+            }
+        });
+        $scope.Submit = function () {
+            if ($scope.Utility.IsEmpty($scope.Customer.CustomerName)) {
                 alert("Not a proper data");
             }
             else {
@@ -41,21 +29,30 @@
             }
         }
     }
-    var myapp = angular.module("myApp", []);
-    myapp.controller("CustomerObj",Customer);
+
+    var myApp = angular.module("myApp", []);// register my app
+    myApp.controller("BindingCode", BindingCode);//register controller
+    myApp.factory("Factory", Factory);
+    myApp.service("UtilityObject", Utility);// will create a global object
 </script>
 <body ng-app="myApp">
     
-    <div id="CustScreen" ng-controller="CustomerObj">
-       
-        Customer Name:- <input type="text" ng-model="CustomerName" id="CustomerName" />
-        Customer Code:- <input type="text" ng-model="CustomerCode" id="CustomerCode" />
-        Customer Amount:- <input type="text" ng-model="CustomerAmt" id="CustomerAmt" style="background-color:{{CustomerAmtColor}}" />
-        <input type="button" name="name" ng-click="Submit()" value="Submit" />
-        <div id="divCustomerName"> {{CustomerName}}</div>
-        <div id="divCustomerCode"> {{CustomerCode}}</div>
-        Sale Date and Time :{{::SalesDateTime}} <br />
-    </div><br/>
+    <div ng-app="myApp">
+        <div id="CustScreen" ng-controller="BindingCode">
+            Welcome to Application {{::Utility.ApplicationName}} and the current version is {{::Utility.ApplicationVersion}}<br />
+            Customer Name :- <input ng-model="Customer.CustomerName" type="text" id="CustomerName" value="" /><br />
+            Customer Code :- <input ng-model="Customer.CustomerCode" type="text" id="CustomerCode" value="" /><br />
+            Customer Amount :- <input style="background-color:{{CustomerAmountColor}}" ng-model="Customer.CustomerAmount" type="text" id="CustomerAmount" value="" /><br />
+            <input type="button" ng-click="Submit()" name="name" value="Submit" /><br />
+            <input type="button" ng-click="Customer.CalculateDiscount()" name="name" value="Discount" /><br />
+            {{::Customer.SalesDateTime}}<br />
+            {{Customer.CustomerName}}<br />
+            {{Customer.CustomerCode}}<br />
+
+        </div><br />
+
+
+    </div>
     
 </body>
 </html>
