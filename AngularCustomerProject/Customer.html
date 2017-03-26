@@ -8,8 +8,52 @@
 <script src="Scripts/Customer.js"></script>
 <script src="Scripts/Utility.js"></script>
 <script>
-    function BindingCode($scope, Factory, UtilityObject) {
+    function CopyRight() {
+        var directive = {}; // new JSON object
+        directive.restrict = "EA";
+
+        directive.template = "@CopyRight 2016-2017  {{Customer.CustomerName}}";
+        return directive;
+    }
+    function UserControl() {
+        var directive = {}; // new JSON object
+        directive.scope = {
+            previewData: "@"
+            ,
+            editFld1: "=",
+            anyMethod: "&"
+        };
+        directive.templateUrl = "UserControl1.html";
+        return directive;
+    }
+    
+    function BindingCode($scope, Factory, UtilityObject, $http, $q) {
+        function setCustomers(data) { $scope.Customers = data; }
+        function clearCustomers(data) { $scope.Customer = {}; }
+        function failure1() { alert("Failure1"); }
+        function failure2() { alert("Failure2"); }
+        function Notify1() {
+            alert("Notify1");
+        }
+        function Notify2() {
+            alert("Notify2");
+        }
+        var defer = null;
+        // from q ---> defer object
+        function initPromises() {
+            // from Q --> defer object
+            defer = $q.defer();
+            // // defer --> promise object
+            var promise = defer.promise;
+            // promise object you will attach you logics
+            promise.then(setCustomers, failure1, Notify1);
+            promise.then(clearCustomers, failure2, Notify2);
+        }
+    
+       
+
         $scope.Customer = Factory.CreateCustomer(2, UtilityObject);
+        $scope.Customers = {};
         $scope.CustomerAmountColor = "Red";
         $scope.Utility = UtilityObject;
         $scope.$watch("Customer.CustomerAmount", function () {
@@ -25,15 +69,28 @@
                 alert("Not a proper data");
             }
             else {
-                alert("Proper data");
+                initPromises();
+                //$http.post("http://localhost:59544/api/Customer", $scope.Customer).then
+                //(function (data) {
+                    
+                //    defer.resolve(data);
+                //    defer.reject();
+                   
+                //});
+                $http.post( "http://localhost:59544/api/Customer1",$scope.Customer).then(
+                      function Success(data) { defer.resolve(data) }, function Error() { defer.reject;}
+
+                    );
             }
         }
     }
 
-    var myApp = angular.module("myApp", []);// register my app
-    myApp.controller("BindingCode", BindingCode);//register controller
+    var myApp = angular.module("myApp", []);
+    myApp.controller("BindingCode", BindingCode);
     myApp.factory("Factory", Factory);
-    myApp.service("UtilityObject", Utility);// will create a global object
+    myApp.service("UtilityObject", Utility);
+    myApp.directive("companyCopyRight", CopyRight);
+    myApp.directive("userControl", UserControl);
 </script>
 <body ng-app="myApp">
     
@@ -48,7 +105,28 @@
             {{::Customer.SalesDateTime}}<br />
             {{Customer.CustomerName}}<br />
             {{Customer.CustomerCode}}<br />
+            <table>
+                <tr>
+                    <td>Name</td>
+                    <td>Code</td>
+                    <td>Amount</td>
+                    <td>Sales Date</td>
+                </tr>
+                <tr ng-repeat="cust in Customers">
+                    <td>{{::cust.CustomerName}}</td>
+                    <td>{{::cust.CustomerCode}}</td>
+                    <td>{{::cust.CustomerAmount}}</td>
+                    <td>{{::cust.SalesDateTime}}</td>
+                </tr>
+            </table><br/>
+            <user-control any-method="Customer.CalculateDiscount()"
+                          edit-fld1="Customer.CustomerName"
+                          preview-data="{{Customer.CustomerName}}&#13;&#10; {{Customer.CustomerCode}} &#13;&#10;{{Customer.SalesDateTime}}">
 
+            </user-control>
+            <company-copy-right>
+
+            </company-copy-right>
         </div><br />
 
 
