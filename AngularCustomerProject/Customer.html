@@ -77,10 +77,14 @@
                 //    defer.reject();
                    
                 //});
-                $http.post( "http://localhost:59544/api/Customer1",$scope.Customer).then(
-                      function Success(data) { defer.resolve(data) }, function Error() { defer.reject;}
+                $http.post("http://localhost:59544/api/Customer", $scope.Customer).
+                 success(function (data) {
+                     debugger;
+                     defer.resolve(data);
+                 }).error(function (err) {
+                     defer.reject();
+                 });
 
-                    );
             }
         }
     }
