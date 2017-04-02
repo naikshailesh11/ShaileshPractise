@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Master page</title>
+</head>
+<script src="Scripts/angular.js"></script>
+<script src="Scripts/angular-route.js"></script>
+<script>
+    var myApp = angular.module("myApp", ['ngRoute']);
+    
+   
+    myApp.config(['$routeProvider',
+    function ($routeProvider) {;
+        $routeProvider.
+        when('/Page1', {
+            templateUrl: 'Page1.html'
+        }).
+        when('/Page2', {
+            templateUrl: 'Page2.html'
+        }).
+        otherwise({
+            redirectTo: '/'
+        });
+    }]);
+
+</script>
+<body ng-app="myApp">
+    This is a fixed section<br />
+   <script>
+       alert("Loaded");
+   </script>
+    <a href="#Page1"> Page 1 </a><br />
+     <a href="#Page2"> Page 2 </a>
+
+    <div ng-view>
+        <!--  Load Page 1 and Page 2 -->
+    </div>
+</body>
+</html>
